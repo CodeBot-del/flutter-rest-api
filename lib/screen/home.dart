@@ -25,9 +25,11 @@ class _HomeScreenState extends State<HomeScreen> {
         itemBuilder: (context, index) {
           final user = users[index];
           final email = user.email;
+          final color = user.gender == 'male' ? Colors.blue : Colors.green;
           return ListTile(
             title: Text(email),
-            subtitle: Text(email),
+            subtitle: Text(user.phone),
+            tileColor: color,
           );
         },
       ),
