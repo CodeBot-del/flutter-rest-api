@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:rest_apis/model/user.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -11,7 +12,7 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  List<dynamic> users = [];
+  List<User> users = [];
 
   @override
   Widget build(BuildContext context) {
@@ -23,15 +24,9 @@ class _HomeScreenState extends State<HomeScreen> {
         itemCount: users.length,
         itemBuilder: (context, index) {
           final user = users[index];
-          final name = user['name']['first'];
-          final email = user['email'];
-          final imageUrl = user['picture']['thumbnail'];
+          final email = user.email;
           return ListTile(
-            leading:  ClipRRect(
-              borderRadius: BorderRadius.circular(100),
-              child: Image.network(imageUrl),
-              ),
-            title: Text(name.toString()),
+            title: Text(email),
             subtitle: Text(email),
           );
         },
@@ -47,9 +42,19 @@ class _HomeScreenState extends State<HomeScreen> {
     final response = await http.get(uri);
     final body = response.body;
     final json = jsonDecode(body);
-    users = json['results'];
+    final results = json['results'] as List<dynamic>;
+    final transformed = results.map((e) {
+      return User(
+        cell: e['cell'],
+        email: e['email'],
+        gender: e['gender'],
+        nat: e['nat'],
+        phone: e['phone'],
+      );
+    }).toList();
+
     setState(() {
-      users = json['results'];
+      users = transformed;
     });
     print('fetchUsers completed');
   }
