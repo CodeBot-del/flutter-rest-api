@@ -2,8 +2,6 @@ import 'dart:convert';
 
 import 'package:http/http.dart' as http;
 import 'package:rest_apis/model/user.dart';
-import 'package:rest_apis/model/user_dob.dart';
-import 'package:rest_apis/model/user_name.dart';
 
 class UserApi {
   static Future<List<User>> fetchUsers() async {
@@ -14,27 +12,7 @@ class UserApi {
     final json = jsonDecode(body);
     final results = json['results'] as List<dynamic>;
     final users = results.map((e) {
-      final name = UserName(
-        title: e['name']['title'],
-        first: e['name']['first'],
-        last: e['name']['last'],
-      );
-
-      final date = e['dob']['date'];
-      final dob = UserDob(
-        age: e['dob']['age'],
-        date: DateTime.parse(date),
-      );
-
-      return User(
-        cell: e['cell'],
-        email: e['email'],
-        gender: e['gender'],
-        nat: e['nat'],
-        phone: e['phone'],
-        name: name,
-        dob: dob,
-      );
+      return User.fromMap(e);
     }).toList();
     return users;
   }
