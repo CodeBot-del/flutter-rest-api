@@ -24,17 +24,10 @@ class User {
   });
 
   factory User.fromMap(Map<String, dynamic> e) {
-    final name = UserName(
-      title: e['name']['title'],
-      first: e['name']['first'],
-      last: e['name']['last'],
-    );
+    final name = UserName.fromMap(e['name']);
 
     final date = e['dob']['date'];
-    final dob = UserDob(
-      age: e['dob']['age'],
-      date: DateTime.parse(date),
-    );
+    final dob = UserDob.fromMap(e['dob']);
 
     final location = UserLocation.fromMap(e['location']);
 
